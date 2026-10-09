@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.sp
 import com.example.triangle.ui.theme.TriangleTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.Button
+import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +55,43 @@ fun DemoText(message: String, fontSize: TextUnit) {
     )
 }
 
+fun calculate(letter: String, value: Double): String {
+    var a = 0.0
+    var h = 0.0
+    var s = 0.0
+
+    when (letter) {
+        "a" -> {
+            a = value
+            h = a * sqrt(2.0)
+            s = a * a / 2
+        }
+        "h" -> {
+            h = value
+            a = h / sqrt(2.0)
+            s = h * h / 4
+        }
+        "s" -> {
+            s = value
+            a = sqrt(2 * s)
+            h = 2 * sqrt(s)
+        }
+        else -> {
+            return "Ошибка! Введите a, h или s"
+        }
+    }
+
+    return "Результат:\n" +
+            "Катет a = $a\n" +
+            "Гипотенуза h = $h\n" +
+            "Площадь s = $s"
+}
+
 @Composable
 fun DemoScreen(modifier: Modifier = Modifier) {
     var letter by remember { mutableStateOf("") }
     var value by remember { mutableStateOf("") }
+    var result by remember { mutableStateOf("")}
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -98,6 +133,33 @@ fun DemoScreen(modifier: Modifier = Modifier) {
                 focusedBorderColor = Color(0xFF27A6F5),
                 unfocusedBorderColor = Color(0xFFF268DC)
             )
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = {
+                if (letter.isEmpty() || value.isEmpty()) {
+                    result = "Заполните оба поля!"
+                } else {
+                    val num = value.toDoubleOrNull()
+                    if (num == null || num <= 0) {
+                        result = "Ошибка: введите положительное число!"
+                    } else {
+                        result = calculate(letter, num)
+                    }
+                }
+            }
+        ) {
+            Text("Вычислить")
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = result,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
