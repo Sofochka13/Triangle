@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -117,6 +119,7 @@ fun DemoScreen(modifier: Modifier = Modifier) {
             onValueChange = { letter = it },
             label = { Text("Введите первую букву известного элемента") },
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
             colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color(0xFF27A6F5),
             unfocusedBorderColor = Color(0xFFF268DC)
@@ -130,6 +133,7 @@ fun DemoScreen(modifier: Modifier = Modifier) {
             onValueChange = { value = it },
             label = { Text("Введите значение") },
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(0xFF27A6F5),
                 unfocusedBorderColor = Color(0xFFF268DC)
@@ -140,11 +144,11 @@ fun DemoScreen(modifier: Modifier = Modifier) {
 
         Button(
             onClick = {
-                // Проверка через if (из Sh01)
+
                 if (letter.isEmpty() || value.isEmpty()) {
                     result = "Заполните оба поля!"
                 } else {
-                    val num = value.toDoubleOrNull()
+                    val num = value.replace(",", ".").toDoubleOrNull()
                     if (num == null || num <= 0) {
                         result = "Ошибка: введите положительное число!"
                     } else {
@@ -163,11 +167,20 @@ fun DemoScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Text(
-            text = result,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
+        if (result.isNotEmpty()) {
+            Text(
+                text = result,
+                modifier = Modifier
+                    .border(
+                        width = 2.dp,
+                        color = Color(0xFFF268DC),
+                        shape = RoundedCornerShape(16.dp)  // ← закругление
+                    )
+                    .padding(16.dp),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
