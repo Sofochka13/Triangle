@@ -30,6 +30,7 @@ import com.example.triangle.ui.theme.TriangleTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() {
@@ -139,6 +140,7 @@ fun DemoScreen(modifier: Modifier = Modifier) {
 
         Button(
             onClick = {
+                // Проверка через if (из Sh01)
                 if (letter.isEmpty() || value.isEmpty()) {
                     result = "Заполните оба поля!"
                 } else {
@@ -149,9 +151,14 @@ fun DemoScreen(modifier: Modifier = Modifier) {
                         result = calculate(letter, num)
                     }
                 }
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFF268DC),
+                contentColor = Color.White
+            ),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Вычислить")
+            Text("Вычислить", fontSize = 18.sp)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
